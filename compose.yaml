@@ -1,0 +1,25 @@
+services:
+  app:
+    image: ${IMAGE_REF:-releaseops:local}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${APP_HOST_PORT:-18081}:8080"
+    environment:
+      API_TOKEN: ${API_TOKEN:?Use scripts/deploy.sh to generate an operator token}
+      APP_ENV: ${APP_ENV:-staging}
+      FAILURE_FILE: /tmp/releaseops-unhealthy
+    volumes:
+      - data:/data
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 128m
+    cpus: 0.5
+    stop_grace_period: 15s
+volumes:
+  data:
+    name: ${DEPLOY_NAMESPACE:-releaseops}_${APP_ENV:-staging}_data

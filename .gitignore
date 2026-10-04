@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.local/
+.deploy/
+.venv/
+.env
+*.db
+*.db-*
+*.log
+infra/aws/.terraform/
+*.tfstate*
+*.tfplan
+infra/aws/terraform.tfvars
+artifacts/
+node_modules/

@@ -1,0 +1,12 @@
+.git
+.github
+.local
+.deploy
+tests
+docs
+infra
+artifacts
+__pycache__
+*.pyc
+*.db*
+*.env

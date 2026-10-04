@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ReleaseOps: application releases, service health, and incident operations.">
+  <title>ReleaseOps · Service operations</title>
+  <link rel="stylesheet" href="/styles.css"><script src="/app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/"><span class="brand-icon">R<span>↗</span></span><span>ReleaseOps<small>OPERATIONS WORKSPACE</small></span></a>
+    <div class="workspace"><span class="workspace-mark">P</span><div>Platform engineering<small>Application delivery lab</small></div></div>
+    <p class="nav-label">WORKSPACE</p>
+    <nav aria-label="Main navigation">
+      <button class="nav-item active" data-view="overview"><span aria-hidden="true">◫</span>Overview</button>
+      <button class="nav-item" data-view="releases"><span aria-hidden="true">↗</span>Releases</button>
+      <button class="nav-item" data-view="incidents"><span aria-hidden="true">◎</span>Incident desk<span class="nav-count" id="incident-nav-count">0</span></button>
+      <button class="nav-item" data-view="board"><span aria-hidden="true">▤</span>Work board</button>
+    </nav>
+    <div class="sidebar-bottom"><div class="lab-label"><span class="green-dot"></span>PRIVATE LEARNING LAB</div><p>Build. Release. Learn.<br>Keep every change traceable.</p><button id="access-button" class="access-button">◇ <span id="access-label">Unlock editing</span></button></div>
+  </aside>
+  <main>
+    <header class="topbar"><div class="breadcrumb">Workspace <span>/</span> <strong id="breadcrumb-current">Overview</strong></div><div class="topbar-right"><span class="environment" id="environment">DEVELOPMENT</span><button id="mobile-access-button" class="mobile-access-button" aria-label="Unlock editing">Unlock</button><span class="avatar" aria-label="Operator">OP</span></div></header>
+    <div class="content">
+      <div class="page-title"><div><div class="eyebrow">APPLICATION DELIVERY</div><h1 id="page-title">Deployment overview</h1><p id="page-subtitle">A clear view of your releases, service health, and team priorities.</p></div><div class="page-actions"><button class="button secondary" id="refresh-button">↻ Refresh</button><button class="button primary" id="new-task-button">+ New task</button></div></div>
+      <div id="connection-error" class="banner error" role="alert" hidden></div>
+      <div id="demo-banner" class="banner demo" hidden><span>◇</span> Example tickets are loaded for exploration. Release history and health observations use real recorded data.</div>
+      <section class="stats" data-views="overview" aria-label="Service statistics">
+        <article class="stat-card"><div class="stat-label">Application readiness <span>◉</span></div><div class="stat-value" id="health-value">Connecting</div><div class="stat-note" id="health-note">Checking service and database</div></article>
+        <article class="stat-card"><div class="stat-label">Readiness pass rate <span>↗</span></div><div class="stat-value" id="availability-value">—</div><div class="stat-note" id="availability-note">No observations yet · 24h window</div></article>
+        <article class="stat-card"><div class="stat-label">Active incidents <span>◎</span></div><div class="stat-value" id="incidents-value">0</div><div class="stat-note">Open or under investigation</div></article>
+        <article class="stat-card"><div class="stat-label">Recorded releases <span>▣</span></div><div class="stat-value" id="releases-value">0</div><div class="stat-note" id="version-note">Current version —</div></article>
+      </section>
+      <div class="overview-grid" data-views="overview releases">
+        <section class="panel releases-panel"><div class="panel-heading"><div><h2>Release activity</h2><p>Deployment and rollback history</p></div><span class="pill neutral">CURRENT ENVIRONMENT</span></div><div id="release-list"></div><div class="panel-foot"><span class="green-dot"></span> Releases are recorded after readiness checks pass.</div></section>
+        <section class="panel health-panel"><div class="panel-heading"><div><h2>Service observations</h2><p>Recent external readiness checks</p></div><span class="pill green" id="probe-count">0 CHECKS</span></div><div class="latency-title"><strong id="latency-value">—</strong><span>average successful check latency</span></div><div id="health-chart" class="chart"></div><div class="chart-foot"><span id="chart-from">Waiting for observations</span><span id="chart-to">Now</span></div><div class="health-explainer">99.9% learning target · sampled readiness success, measured over 24 hours.</div></section>
+      </div>
+      <section class="panel incident-panel" data-views="overview incidents"><div class="panel-heading"><div><h2>Incident desk</h2><p>Track investigation and resolution</p></div><button id="new-incident-button" class="button secondary small">+ Report incident</button></div><div class="table-scroll"><table><thead><tr><th>INCIDENT</th><th>SEVERITY</th><th>STATUS</th><th>OPENED</th><th>ACTION</th></tr></thead><tbody id="incident-list"></tbody></table></div></section>
+      <div class="lower-grid" data-views="overview board">
+        <section class="panel board-panel"><div class="panel-heading"><div><h2>Team work board</h2><p>Plan and communicate the next change</p></div><span id="pending-count" class="pill neutral">0 PENDING</span></div><div class="board" id="board"></div></section>
+        <section class="panel feed-panel"><div class="panel-heading"><div><h2>Activity log</h2><p>Recent workspace changes</p></div><span class="live-indicator"><span class="green-dot"></span>LIVE</span></div><div id="event-list"></div></section>
+      </div>
+      <footer><span><span class="green-dot" id="footer-dot"></span><span id="footer-status">Connecting to workspace</span></span><span id="updated-at">Auto-refresh every 15 seconds</span></footer>
+    </div>
+  </main>
+  <dialog id="access-dialog"><form id="access-form"><div class="dialog-heading"><h2>Operator access</h2><button type="button" class="close-dialog" aria-label="Close">×</button></div><p>Enter this workspace’s operator token to create and update items.</p><label for="operator-token">Operator token</label><input id="operator-token" type="password" minlength="24" required autocomplete="off"><p class="input-help">Local setup saves the token in <code>.local/dev-token</code>. It stays in memory for this browser tab.</p><div class="dialog-actions"><button class="button primary" type="submit">Unlock editing</button></div></form></dialog>
+  <dialog id="task-dialog"><form id="task-form"><div class="dialog-heading"><h2>Create a task</h2><button type="button" class="close-dialog" aria-label="Close">×</button></div><label for="task-title">Task title</label><input id="task-title" name="title" maxlength="160" required placeholder="What needs to be delivered?"><label for="task-owner">Owner or team</label><input id="task-owner" name="owner" maxlength="60" value="Unassigned" required><div class="form-columns"><div><label for="task-priority">Priority</label><select id="task-priority" name="priority"><option value="medium">Medium</option><option value="high">High</option><option value="low">Low</option></select></div><div><label for="task-status">Status</label><select id="task-status" name="status"><option value="backlog">Backlog</option><option value="in-progress">In progress</option><option value="done">Done</option></select></div></div><div class="dialog-actions"><button class="button primary" type="submit">Create task</button></div></form></dialog>
+  <dialog id="incident-dialog"><form id="incident-form"><div class="dialog-heading"><h2>Report an incident</h2><button type="button" class="close-dialog" aria-label="Close">×</button></div><label for="incident-title">Incident summary</label><input id="incident-title" name="title" maxlength="160" required placeholder="Describe the observed failure"><label for="incident-service">Affected service</label><input id="incident-service" name="service" maxlength="60" value="ReleaseOps" required><label for="incident-severity">Severity</label><select id="incident-severity" name="severity"><option value="SEV3">SEV3 · Minor impact</option><option value="SEV2">SEV2 · Degraded service</option><option value="SEV1">SEV1 · Service unavailable</option></select><div class="dialog-actions"><button class="button primary" type="submit">Report incident</button></div></form></dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>

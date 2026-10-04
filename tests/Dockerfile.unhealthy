@@ -1,0 +1,2 @@
+FROM releaseops:integration-v2
+HEALTHCHECK --interval=1s --timeout=1s --start-period=0s --retries=1 CMD python -c "raise SystemExit(1)"

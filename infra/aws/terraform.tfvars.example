@@ -1,0 +1,5 @@
+aws_region = "ap-south-1"
+vpc_id     = "vpc-REPLACE"
+subnet_id  = "subnet-REPLACE"
+key_name   = "REPLACE_WITH_EXISTING_KEY_PAIR"
+admin_cidr = "203.0.113.10/32" # Documentation-only address: replace with your public IP.
