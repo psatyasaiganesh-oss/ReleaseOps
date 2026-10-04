@@ -111,7 +111,6 @@ jobs:
       contents: read
       packages: read
     env:
-      DOCKER_CONFIG: ${{ runner.temp }}/releaseops-docker-config
       STATE_DIR: /opt/releaseops/state
       IMAGE: ${{ needs.publish.outputs.image }}
       TARGET_ENV: ${{ inputs.deploy_environment }}
@@ -120,6 +119,8 @@ jobs:
       REGISTRY_USER: ${{ github.actor }}
     steps:
       - uses: actions/checkout@v6
+      - name: Set private registry credential directory
+        run: echo "DOCKER_CONFIG=$RUNNER_TEMP/releaseops-docker-config" >> "$GITHUB_ENV"
       - name: Authenticate image pull
         run: printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
       - name: Deploy and verify
